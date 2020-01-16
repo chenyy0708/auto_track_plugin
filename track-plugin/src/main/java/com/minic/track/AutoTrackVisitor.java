@@ -34,7 +34,7 @@ public class AutoTrackVisitor extends ClassVisitor implements Opcodes {
      */
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        System.out.println("AutoTrackPlugin : visit -----> started ：" + name);
+//        System.out.println("AutoTrackPlugin : visit -----> started ：" + name);
         this.version = version;
         super.visit(version, access, name, signature, superName, interfaces);
     }
@@ -52,7 +52,7 @@ public class AutoTrackVisitor extends ClassVisitor implements Opcodes {
      */
     @Override
     public MethodVisitor visitMethod(final int access, final String name, final String desc, String signature, String[] exceptions) {
-        System.out.println("AutoTrackPlugin : visitMethod : " + name);
+//        System.out.println("AutoTrackPlugin : visitMethod : " + name);
         final MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
         AutoTrackOnClickMethodVisitor autoTrackOnClickMethodVisitor = new AutoTrackOnClickMethodVisitor(methodVisitor, access, name, desc);
         //如果java version 为1.5以前的版本，则使用JSRInlinerAdapter来删除JSR,RET指令
@@ -64,7 +64,7 @@ public class AutoTrackVisitor extends ClassVisitor implements Opcodes {
 
     @Override
     public void visitEnd() {
-        System.out.println("AutoTrackPlugin : visit -----> end");
+//        System.out.println("AutoTrackPlugin : visit -----> end");
         super.visitEnd();
     }
 }
