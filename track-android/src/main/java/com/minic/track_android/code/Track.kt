@@ -1,5 +1,7 @@
 package com.minic.track_android.code
 
+import android.app.Activity
+
 
 /**
  * 描述:
@@ -10,7 +12,7 @@ class Track {
     /**
      * 记录需要埋点的View id
      */
-    var mTrackIds = mutableMapOf<Int, ViewTag>()
+    var mTrackIds = mutableMapOf<Int, MutableList<ViewTag<*>>>()
 
     companion object {
         fun getInstance(): Track {
@@ -22,9 +24,7 @@ class Track {
         val holder = Track()
     }
 
-    fun onView(viewId: Int): ViewTag {
-        val viewTag = ViewTag(viewId)
-        mTrackIds[viewId] = viewTag
-        return viewTag
+    fun <T : Activity> from(activity: Class<T>): ViewTag<T> {
+        return ViewTag(clazz = activity)
     }
 }

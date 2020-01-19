@@ -1,12 +1,29 @@
 package com.minic.track_android.code
 
+import android.app.Activity
+
 
 /**
  * 描述:
  * 作者: ChenYy
  * 日期: 2020-01-16 14:06
  */
-class ViewTag(val id: Int, var subscribe: Subscribe? = null) {
+class ViewTag<T : Activity>(
+    var id: Int = -1,
+    val clazz: Class<T>,
+    var subscribe: Subscribe? = null
+) {
+
+    fun onView(viewId: Int): ViewTag<T> {
+        this.id = viewId
+        var mTags = Track.getInstance().mTrackIds[viewId]
+        if (mTags == null) {
+            mTags = mutableListOf()
+            Track.getInstance().mTrackIds[id] = mTags
+        }
+        mTags.add(this)
+        return this
+    }
 
     fun subscribe(subscribe: Subscribe) {
         this.subscribe = subscribe

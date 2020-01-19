@@ -1,5 +1,6 @@
 package com.minic.autotrack
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -27,22 +28,36 @@ class MainActivity : AppCompatActivity() {
         tv_5?.setOnClickListener { view ->
         }
 
-        Track.getInstance().onView(R.id.tv_1).subscribe(object : Subscribe {
-            override fun onSubscribe(view: View) {
-                Toast.makeText(this@MainActivity, "tv_1", Toast.LENGTH_LONG).show()
-            }
-        })
+        tv_test?.setOnClickListener {
+            startActivity(Intent(this, TwoActivity::class.java))
+        }
 
-        Track.getInstance().onView(R.id.tv_3).subscribe(object : Subscribe {
-            override fun onSubscribe(view: View) {
-                Toast.makeText(this@MainActivity, "tv_3", Toast.LENGTH_LONG).show()
-            }
-        })
+        Track.getInstance().from(MainActivity::class.java).onView(R.id.tv_1)
+            .subscribe(object : Subscribe {
+                override fun onSubscribe(view: View) {
+                    Toast.makeText(this@MainActivity, "tv_1", Toast.LENGTH_LONG).show()
+                }
+            })
 
-        Track.getInstance().onView(R.id.tv_4).subscribe(object : Subscribe {
-            override fun onSubscribe(view: View) {
-                Toast.makeText(this@MainActivity, "tv_4", Toast.LENGTH_LONG).show()
-            }
-        })
+        Track.getInstance().from(MainActivity::class.java).onView(R.id.tv_2)
+            .subscribe(object : Subscribe {
+                override fun onSubscribe(view: View) {
+                    Toast.makeText(this@MainActivity, "MainActivity tv_2", Toast.LENGTH_LONG).show()
+                }
+            })
+
+        Track.getInstance().from(TwoActivity::class.java).onView(R.id.tv_2)
+            .subscribe(object : Subscribe {
+                override fun onSubscribe(view: View) {
+                    Toast.makeText(this@MainActivity, "TwoActivity tv_2", Toast.LENGTH_LONG).show()
+                }
+            })
+
+        Track.getInstance().from(MainActivity::class.java).onView(R.id.tv_4)
+            .subscribe(object : Subscribe {
+                override fun onSubscribe(view: View) {
+                    Toast.makeText(this@MainActivity, "tv_4", Toast.LENGTH_LONG).show()
+                }
+            })
     }
 }
