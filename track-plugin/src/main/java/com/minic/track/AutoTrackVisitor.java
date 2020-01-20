@@ -3,6 +3,7 @@ package com.minic.track;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.commons.AdviceAdapter;
 
 /**
  * 描述: 自动埋点
@@ -12,9 +13,12 @@ import org.objectweb.asm.Opcodes;
 public class AutoTrackVisitor extends ClassVisitor implements Opcodes {
 
     private int version;
+    private boolean isJar;
+    private String superName;
 
-    public AutoTrackVisitor(ClassVisitor classVisitor) {
+    public AutoTrackVisitor(ClassVisitor classVisitor, boolean isJar) {
         super(Opcodes.ASM4, classVisitor);
+        this.isJar = isJar;
     }
 
     /**
@@ -36,6 +40,7 @@ public class AutoTrackVisitor extends ClassVisitor implements Opcodes {
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
 //        System.out.println("AutoTrackPlugin : visit -----> started ：" + name);
         this.version = version;
+        this.superName = superName;
         super.visit(version, access, name, signature, superName, interfaces);
     }
 
@@ -54,12 +59,17 @@ public class AutoTrackVisitor extends ClassVisitor implements Opcodes {
     public MethodVisitor visitMethod(final int access, final String name, final String desc, String signature, String[] exceptions) {
 //        System.out.println("AutoTrackPlugin : visitMethod : " + name);
         final MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
-        AutoTrackOnClickMethodVisitor autoTrackOnClickMethodVisitor = new AutoTrackOnClickMethodVisitor(methodVisitor, access, name, desc);
+        AdviceAdapter visitor;
+        if (isJar) { // 处理生命周期
+            visitor = new AutoTrackLifecycleMethodVisitor(methodVisitor, access, name, desc,superName);
+        } else { // 文件夹，处理点击事件
+            visitor = new AutoTrackOnClickMethodVisitor(methodVisitor, access, name, desc);
+        }
         //如果java version 为1.5以前的版本，则使用JSRInlinerAdapter来删除JSR,RET指令
         if (version <= Opcodes.V1_5) {
-            return new AnalyticsJSRAdapter(Opcodes.ASM4, autoTrackOnClickMethodVisitor, access, name, desc, signature, exceptions);
+            return new AnalyticsJSRAdapter(Opcodes.ASM4, visitor, access, name, desc, signature, exceptions);
         }
-        return autoTrackOnClickMethodVisitor;
+        return visitor;
     }
 
     @Override

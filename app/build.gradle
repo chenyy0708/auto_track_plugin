@@ -3,19 +3,19 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
-//
-//apply plugin: 'track.plugin'
-//buildscript {
-//    repositories {
-//        maven {
-//            url uri('../repo')
-//        }
-//        jcenter()
-//    }
-//    dependencies {
-//        classpath 'com.minic.track:track:1.0.0'
-//    }
-//}
+
+apply plugin: 'track.plugin'
+buildscript {
+    repositories {
+        maven {
+            url uri('../repo')
+        }
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.minic.track:track-plugin:1.0.0'
+    }
+}
 
 android {
     compileSdkVersion 29

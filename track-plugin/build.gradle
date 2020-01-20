@@ -1,22 +1,22 @@
 apply plugin: 'groovy'
 apply plugin: 'java'
 
-apply plugin: 'com.github.dcendents.android-maven'
-
-group = 'com.github.chenyy0708'
-
-//apply plugin: 'maven'
+//apply plugin: 'com.github.dcendents.android-maven'
 //
-//group='com.minic.track'
-//version='1.0.0'
-//
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {
-//            repository(url: uri('../repo'))
-//        }
-//    }
-//}
+//group = 'com.github.chenyy0708'
+
+apply plugin: 'maven'
+
+group='com.minic.track'
+version='1.0.0'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

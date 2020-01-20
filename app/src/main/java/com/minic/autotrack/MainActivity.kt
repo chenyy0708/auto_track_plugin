@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
+import com.minic.track_android.code.ActivityLifeUtil
 import com.minic.track_android.code.Subscribe
 import com.minic.track_android.code.Track
 import kotlinx.android.synthetic.main.activity_main.*

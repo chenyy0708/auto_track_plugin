@@ -90,7 +90,7 @@ class AutoTrackPlugin extends Transform implements Plugin<Project> {
 //                    println '----------- deal with "class" file <' + name + '> -----------'
                     ClassReader classReader = new ClassReader(file.bytes)
                     ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
-                    ClassVisitor cv = new AutoTrackVisitor(classWriter)
+                    ClassVisitor cv = new AutoTrackVisitor(classWriter,false)
                     classReader.accept(cv, EXPAND_FRAMES)
                     byte[] code = classWriter.toByteArray()
                     FileOutputStream fos = new FileOutputStream(
@@ -133,9 +133,22 @@ class AutoTrackPlugin extends Transform implements Plugin<Project> {
                 String entryName = jarEntry.getName()
                 ZipEntry zipEntry = new ZipEntry(entryName)
                 InputStream inputStream = jarFile.getInputStream(jarEntry)
-                // jar包不处理View点击事件埋点
-                jarOutputStream.putNextEntry(zipEntry)
-                jarOutputStream.write(IOUtils.toByteArray(inputStream))
+
+                //插桩class
+                if (checkClassFile(entryName) && entryName.endsWith("FragmentActivity.class")) {
+                    //class文件处理
+                    println '----------- deal with "jar" class file <' + entryName + '> -----------'
+                    jarOutputStream.putNextEntry(zipEntry)
+                    ClassReader classReader = new ClassReader(IOUtils.toByteArray(inputStream))
+                    ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
+                    ClassVisitor cv = new AutoTrackVisitor(classWriter,true)
+                    classReader.accept(cv, EXPAND_FRAMES)
+                    byte[] code = classWriter.toByteArray()
+                    jarOutputStream.write(code)
+                } else {
+                    jarOutputStream.putNextEntry(zipEntry)
+                    jarOutputStream.write(IOUtils.toByteArray(inputStream))
+                }
                 jarOutputStream.closeEntry()
             }
             //结束
