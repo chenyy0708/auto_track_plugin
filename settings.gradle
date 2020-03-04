@@ -1,2 +1,2 @@
-include ':app', ':track-android', ':track-plugin'
+include ':app', ':track-plugin'
 rootProject.name='AutoTrackPlugin'
