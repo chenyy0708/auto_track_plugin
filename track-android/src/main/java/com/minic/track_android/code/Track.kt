@@ -24,7 +24,7 @@ class Track {
         val holder = Track()
     }
 
-    fun <T : Activity> from(activity: Class<T>): ViewTag<T> {
-        return ViewTag(clazz = activity)
+    fun <T : Activity> fromActivity(activity: Class<T>): ViewTag<T> {
+        return ViewTag(fromClazz = activity)
     }
 }

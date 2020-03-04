@@ -10,7 +10,8 @@ import android.app.Activity
  */
 class ViewTag<T : Activity>(
     var id: Int = -1,
-    val clazz: Class<T>,
+    val fromClazz: Class<T>,
+    var toClazz: Class<*>? = null,
     var subscribe: Subscribe? = null
 ) {
 
@@ -22,6 +23,11 @@ class ViewTag<T : Activity>(
             Track.getInstance().mTrackIds[id] = mTags
         }
         mTags.add(this)
+        return this
+    }
+
+    fun toActivity(activity: Class<*>): ViewTag<*> {
+        this.toClazz = activity
         return this
     }
 

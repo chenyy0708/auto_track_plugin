@@ -30,15 +30,49 @@ public class AutoTrackHelper {
                 if (viewTag.getId() == view.getId()) {
                     // 只有目标Activity的view id才响应
                     Context viewContext = view.getContext();
-                    // 不匹配
-                    if (!viewTag.getClazz().isInstance(viewContext)) {
-                        continue;
-                    }
-                    // 回调不为空
-                    if (viewTag.getSubscribe() != null) {
-                        viewTag.getSubscribe().onSubscribe(view);
-                        // 匹配完成，跳出循环
-                        break;
+                    // 取出目标Activity，判断是否为空
+                    Class<?> toClazz = viewTag.getToClazz();
+                    if (toClazz != null) { // 需要统计从A页面->B页面的点击事件
+                        // 不匹配
+                        if (!viewTag.getToClazz().isInstance(viewContext)) {
+                            continue;
+                        }
+                        // 标记A、B页面的位置
+                        int fromPosition = -1;
+                        int toPosition = -1;
+                        // 判断页面是否是从A->B页面路径
+                        for (int i = 0; i < AppManager.getAppManager().getAllActivity().size(); i++) {
+                            if (viewTag.getFromClazz().isInstance(AppManager.getAppManager().getAllActivity().get(i))) {
+                                fromPosition = i;
+                                continue;
+                            }
+                            if (viewTag.getToClazz().isInstance(AppManager.getAppManager().getAllActivity().get(i))) {
+                                toPosition = i;
+                            }
+                            // A、B页面的位置都找到了，跳出循环
+                            if (fromPosition != -1 && toPosition != -1) {
+                                break;
+                            }
+                        }
+                        if (toPosition > fromPosition) { // A页面打开的B页面
+                            if (viewTag.getSubscribe() != null) {
+                                viewTag.getSubscribe().onSubscribe(view);
+                                // 匹配完成，跳出循环
+                                break;
+                            }
+                        }
+
+                    } else { // 单纯A页面的View点击事件
+                        // 不匹配
+                        if (!viewTag.getFromClazz().isInstance(viewContext)) {
+                            continue;
+                        }
+                        // 回调不为空
+                        if (viewTag.getSubscribe() != null) {
+                            viewTag.getSubscribe().onSubscribe(view);
+                            // 匹配完成，跳出循环
+                            break;
+                        }
                     }
                 }
             }

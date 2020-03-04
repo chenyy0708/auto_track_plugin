@@ -11,5 +11,7 @@ class ThreeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         tv_3?.setOnClickListener { view ->
         }
+        tv_4?.setOnClickListener { view ->
+        }
     }
 }

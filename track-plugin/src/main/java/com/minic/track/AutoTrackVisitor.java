@@ -60,11 +60,8 @@ public class AutoTrackVisitor extends ClassVisitor implements Opcodes {
 //        System.out.println("AutoTrackPlugin : visitMethod : " + name);
         final MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
         AdviceAdapter visitor;
-        if (isJar) { // 处理生命周期
-            visitor = new AutoTrackLifecycleMethodVisitor(methodVisitor, access, name, desc,superName);
-        } else { // 文件夹，处理点击事件
-            visitor = new AutoTrackOnClickMethodVisitor(methodVisitor, access, name, desc);
-        }
+        // 文件夹，处理点击事件
+        visitor = new AutoTrackOnClickMethodVisitor(methodVisitor, access, name, desc);
         //如果java version 为1.5以前的版本，则使用JSRInlinerAdapter来删除JSR,RET指令
         if (version <= Opcodes.V1_5) {
             return new AnalyticsJSRAdapter(Opcodes.ASM4, visitor, access, name, desc, signature, exceptions);

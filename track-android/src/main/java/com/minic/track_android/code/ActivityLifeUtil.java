@@ -1,7 +1,8 @@
 package com.minic.track_android.code;
 
 import android.app.Activity;
-import android.util.Log;
+import android.app.Application;
+import android.os.Bundle;
 
 /**
  * 描述:
@@ -12,27 +13,42 @@ public class ActivityLifeUtil {
 
     public static final String TAG = "ActivityLifeUtil";
 
-    public static void onActivityCreated(Activity activity) {
-        Log.d(TAG, "onActivityCreated:" + activity.getClass().getSimpleName());
-    }
+    public static void init(Application application) {
+        application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                AppManager.getAppManager().addActivity(activity);
+            }
 
-    public static void onActivityStarted(Activity activity) {
-        Log.d(TAG, "onActivityStarted:" + activity.getClass().getSimpleName());
-    }
+            @Override
+            public void onActivityStarted(Activity activity) {
 
-    public static void onActivityResumed(Activity activity) {
-        Log.d(TAG, "onActivityResumed:" + activity.getClass().getSimpleName());
-    }
+            }
 
-    public static void onActivityPaused(Activity activity) {
-        Log.d(TAG, "onActivityPaused:" + activity.getClass().getSimpleName());
-    }
+            @Override
+            public void onActivityResumed(Activity activity) {
 
-    public static void onActivityStopped(Activity activity) {
-        Log.d(TAG, "onActivityStopped:" + activity.getClass().getSimpleName());
-    }
+            }
 
-    public static void onActivityDestroyed(Activity activity) {
-        Log.d(TAG, "onActivityDestroyed:" + activity.getClass().getSimpleName());
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                AppManager.getAppManager().removeActivity(activity);
+            }
+        });
     }
 }
