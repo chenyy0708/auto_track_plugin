@@ -43,5 +43,5 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.1.3'
     compile 'com.android.support:appcompat-v7:26.0.1'
     compile 'com.android.support:support-v4:26.0.1'
-    compile project(path: ':track-android')
+    compile 'com.github.chenyy0708:AutoTracks:0.0.5'
 }
