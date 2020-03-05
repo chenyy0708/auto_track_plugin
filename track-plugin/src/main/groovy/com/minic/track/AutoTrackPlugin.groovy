@@ -87,7 +87,7 @@ class AutoTrackPlugin extends Transform implements Plugin<Project> {
             directoryInput.file.eachFileRecurse { File file ->
                 def name = file.name
                 if (checkClassFile(name)) {
-                    println '----------- deal with "class" file <' + name + '> -----------'
+//                    println '----------- deal with "class" file <' + name + '> -----------'
                     ClassReader classReader = new ClassReader(file.bytes)
                     ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
                     ClassVisitor cv = new AutoTrackVisitor(classWriter, false)
@@ -137,7 +137,7 @@ class AutoTrackPlugin extends Transform implements Plugin<Project> {
                 //插桩class
                 if (checkClassFile(entryName)) {
                     //class文件处理
-                    println '----------- deal with "jar" class file <' + entryName + '> -----------'
+//                    println '----------- deal with "jar" class file <' + entryName + '> -----------'
                     jarOutputStream.putNextEntry(zipEntry)
                     ClassReader classReader = new ClassReader(IOUtils.toByteArray(inputStream))
                     ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
